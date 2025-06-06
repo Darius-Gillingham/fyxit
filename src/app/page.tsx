@@ -1,103 +1,134 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+
+type Product = {
+  title: string;
+  description: string;
+  image: string;
+  price: string;
+};
+
+const sections = ["Info", "Products", "Contact"];
+
+const categories: string[] = [];
+
+const products: Record<string, Product[]> = {};
+
+function ProductDetail({ product }: { product: Product }) {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="p-6 bg-gray-800 rounded-lg shadow-lg border border-yellow-400">
+      <h3 className="text-2xl font-bold text-yellow-300 mb-2">{product.title}</h3>
+      <img
+        src={product.image}
+        alt={product.title}
+        className="rounded-lg mb-4 w-full max-w-md"
+      />
+      <p className="mb-2 text-white">{product.description}</p>
+      <p className="font-semibold text-lg text-yellow-300">{product.price}</p>
     </div>
+  );
+}
+
+export default function Page() {
+  const [activeSection, setActiveSection] = useState<string | null>("Info");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const resetView = () => {
+    setSelectedProduct(null);
+    setActiveSection("Info");
+  };
+
+  return (
+    <>
+      {/* Header with gradient */}
+      <header className="fixed top-0 left-0 right-0 bg-gradient-to-r from-blue-900 via-blue-700 to-yellow-400 p-6 shadow-lg z-10 flex items-center justify-between border-b-4 border-yellow-300">
+        <div>
+          <h1 className="text-3xl font-extrabold text-white drop-shadow-md">Fyxit</h1>
+          <p className="text-yellow-200 text-sm font-medium drop-shadow-sm">Need a Fix? Fyxit</p>
+        </div>
+        <button
+          onClick={resetView}
+          className="ml-4 p-2 rounded-full hover:scale-105 transition-transform border-2 border-white"
+        >
+          <img
+            src="/assets/HomeLogo.jpg"
+            alt="Home"
+            className="w-8 h-8 rounded-full"
+          />
+        </button>
+      </header>
+
+      {/* Section Tabs */}
+      <section className="grid grid-cols-3 gap-4 mt-24 px-4">
+        {sections.map((section) => (
+          <div
+            key={section}
+            onClick={() => {
+              setActiveSection(section);
+              setSelectedProduct(null);
+            }}
+            className={`p-4 rounded-lg shadow-lg text-center cursor-pointer transition-transform font-semibold ${
+              activeSection === section
+                ? "bg-yellow-300 text-black border-4 border-yellow-400"
+                : "bg-blue-800 text-white border border-yellow-300 hover:bg-blue-700"
+            }`}
+          >
+            {section}
+          </div>
+        ))}
+      </section>
+
+      {/* Section Content */}
+      <main className="pt-12 p-6">
+        {activeSection === "Info" && (
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-black mb-4 drop-shadow-sm">Welcome to Fyxit</h2>
+            <p className="max-w-2xl mx-auto text-black text-md leading-relaxed">
+              Fyxit is an all-natural beverage company that combines real fruit juice with high caffeine to create a great middle ground energy beverage with smooth taste and killer energy.
+            </p>
+          </div>
+        )}
+
+        {activeSection === "Products" && (
+          <div>
+            {selectedProduct ? (
+              <ProductDetail product={selectedProduct} />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {categories.map((category) =>
+                  products[category].map((product, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedProduct(product)}
+                      className="bg-gray-700 p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform border border-yellow-300"
+                    >
+                      <h3 className="text-xl font-bold text-yellow-200">{product.title}</h3>
+                      <p className="text-white">{product.description}</p>
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="rounded-lg mt-2"
+                      />
+                      <p className="mt-2 font-semibold text-yellow-200">{product.price}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeSection === "Contact" && (
+          <div className="text-center text-black">
+            <h2 className="text-2xl font-bold text-yellow-300 mb-4">Get in Touch</h2>
+            <p>Email: dariusgillingham2@gmail.com </p>
+            <p>Email: nicmay9er@gmail.com </p>
+            <p className="mt-1">Instagram: </p>
+            <p className="mt-1">Phone: 236-458-7488</p>
+          </div>
+        )}
+      </main>
+    </>
   );
 }
